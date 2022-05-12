@@ -1,100 +1,137 @@
 
 <!DOCTYPE html>
 <html class="no-js">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title></title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="style.css" />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-      crossorigin="anonymous"
-    />
-   
-  </head>
-  <body class="container">
-    <h1>Canvas Application</h1>
-    <div id="canvas-container">
-      <canvas
-        id="canvas-real"
-        class="canvas"
-        width="900px"
-        height="600px"
-      ></canvas>
-      <canvas
-        id="canvas-draft"
-        class="canvas"
-        width="900px"
-        height="600px"
-      ></canvas>
-    </div>
-    <div class="buttons">
-      <!-- The drawing rectangle button  -->
-      <span class="btn btn-primary fa fa-square" id="drawing-rectangle"
-        >Draw Rectangle</span
-      >
-      <!-- The straight line button  -->
-      <span class="btn btn-primary fa fa-square" id="drawing-straight"
-        >Draw straight line</span
-      >
-      <!-- The drawing line button  -->
-      <span class="btn btn-info fa fa-paint-brush" id="drawing-line"
-        >Pencil</span
-      > 
-    <!-- Save image button  -->
-    <span class="btn btn-info fa fa-square" id="saveimg" onclick="putImage()"
-    >Save</span
-    ></div>
-     
-    <!-- jQuery -->
-      <script
-      src="https://code.jquery.com/jquery-3.5.1.js"
-      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-      crossorigin="anonymous"
-    ></script>
-    <!-- The drawing functionality  -->
-    <script
-      src="Javascript/canvas-common.js"
-      type="text/javascript"
-    ></script>
 
-    <!-- The drawing line functionality  -->
-    <script
-      src="Javascript/draw-line.js"
-      type="text/javascript"
-    ></script>
-      <!-- The straight line functionality  -->
-      <script
-      src="Javascript/straight-line.js"
-      type="text/javascript"
-    ></script>
-     <!-- Save Image functionality  -->
-     <script
-     src="Javascript/save-image.js"
-     type="text/javascript"
-   ></script>
-    <!-- The drawing rectangle functionality  -->
-    <script
-      src="Javascript/rectangle.js"
-      type="text/javascript"
-    ></script>
-    <script type="text/javascript">
-    $(()=>{
-      currentFunction =  new DrawingLine(contextReal)
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title></title>
+  <meta name="description" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+</head>
+
+<body class="container">
+  <h1>Canvas Application</h1>
+  <div id="canvas-container">
+    <canvas id="canvas-real" class="canvas" width="900px" height="600px"></canvas>
+    <canvas id="canvas-draft" class="canvas" width="900px" height="600px"></canvas>
+
+    <div class="Filter">
+      <label>Blur</label>
+      <input type="range" min="0" max="100" value="0" onchange="applyFilter()" data-filter="blur" data-scale="px"><br><br>
+      <label>Brightness</label>
+      <input type="range" min="0" max="200" value="100" onchange="applyFilter()" data-filter="brightness" data-scale="%"><br><br>
+      <label>Contrast</label>
+      <input type="range" min="0" max="200" value="100" onchange="applyFilter()" data-filter="contrast" data-scale="%"><br><br>
+      <label>Grayscale</label>
+      <input type="range" min="0" max="100" value="0" onchange="applyFilter()" data-filter="grayscale" data-scale="%"><br><br>
+      <label>Hue Rotate</label>
+      <input type="range" min="0" max="360" value="0" onchange="applyFilter()" data-filter="hue-rotate" data-scale="deg"><br><br>
+      <label>Invert</label>
+      <input type="range" min="0" max="100" value="0" onchange="applyFilter()" data-filter="invert" data-scale="%"><br><br>
+      <label>Opacity</label>
+      <input type="range" min="0" max="100" value="100" onchange="applyFilter()" data-filter="opacity" data-scale="%"><br><br>
+      <label>Saturate</label>
+      <input type="range" min="1" max="100" value="1" onchange="applyFilter()" data-filter="saturate" data-scale=""><br><br>
+      <label>Sepia</label>
+      <input type="range" min="0" max="100" value="0" onchange="applyFilter()" data-filter="sepia" data-scale="%"><br><br>
+      </div>
+
+  </div>
+  <div class="buttons">
+    <!-- The drawing rectangle button  -->
+    <span class="btn btn-primary fa fa-square" id="drawing-rectangle">Draw Rectangle</span>
+    <!-- The straight line button  -->
+    <span class="btn btn-primary fa fa-square" id="drawing-straight">Draw straight line</span>
+    <!-- The drawing circle button -->
+    <span class="btn btn-info fa fa-paint-brush" id="drawing-circle">Circle</span>
+    <!-- The drawing line button  -->
+    <span class="btn btn-info fa fa-paint-brush" id="drawing-line">Pencil</span>
+    <!-- The Eraser button -->
+    <span class="btn btn-dark fa fa-paint-brush" id="eraser">Eraser</span>
+    <!-- The Insert text button -->
+    <span class="btn btn-dark fa fa-paint-brush" id="insert-text">Text</span>
+    <!--Color Change-->
+    <div id="colors">Color: <input type="color" value="#ffff00" name="myColor" id="myColor"></div>
+
+    <!--Brush-->
+    <button id="brush"><img src="images/brush.png"></button>
+
+    <!-- The Undo button -->
+    <span class="btn btn-dark fa fa-paint-brush" id="undo">Undo</span>
+    <!-- The Redo button -->
+    <span class="btn btn-dark fa fa-paint-brush" id="redo">Redo</span>
+
+    <!-- Save image button  -->
+    <span class="btn btn-info fa fa-square" id="saveimg" onclick="putImage()">Save</span>
+  </div>
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+  <!-- The drawing functionality  -->
+  <script src="Javascript/canvas-common.js" type="text/javascript"></script>
+
+  <!-- The drawing line functionality  -->
+  <script src="Javascript/draw-line.js" type="text/javascript"></script>
+  <!-- The straight line functionality  -->
+  <script src="Javascript/straight-line.js" type="text/javascript"></script>
+  <!-- Save Image functionality  -->
+  <script src="Javascript/save-image.js" type="text/javascript"></script>
+  <!-- The drawing rectangle functionality  -->
+  <script src="Javascript/rectangle.js" type="text/javascript"></script>
+  <!-- The undo-redo functionality -->
+  <script src="./javascript/undo-redo.js" type="text/javascript"></script>
+  <!-- The eraser functionality -->
+  <script src="./javascript/eraser.js" type="text/javascript"></script>
+  <!-- The Circle funtionality -->
+  <script src="./Javascript/circle.js" type="text/javascript"></script>
+  <!-- The insert text funtionality -->
+  <script src="./Javascript/inserttext.js" type="text/javascript"></script>
+
+  <script type="text/javascript">
+    $(() => {
+      currentFunction = new DrawingLine(contextReal);
       $("#drawing-rectangle").click(() => {
         currentFunction = new DrawingRectangle(contextReal, contextDraft);
       });
       $("#drawing-straight").click(() => {
         currentFunction = new straightLine(contextReal, contextDraft);
       });
+      $("#drawing-circle").click(() => {
+        currentFunction = new DrawingCircle(contextReal, contextDraft);
+      });
+      $("#insert-text").click(() => {
+        currentFunction = new Text (contextReal, contextDraft);
+      });
       $("#drawing-line").click(() => {
         currentFunction = new DrawingLine(contextReal);
       });
-    })
-    </script>
-  </body>
+    });
+
+  </script>
+
+  <script type="text/javascript">
+  var image = document.getElementById('canvas-real');
+  var filterControls = document.querySelectorAll('input[type=range]');
+  function applyFilter() {
+    var computedFilters = '';
+    filterControls.forEach(function(item, index) {
+      computedFilters += item.getAttribute('data-filter') + '(' + item.value + item.getAttribute('data-scale') + ') ';
+    });
+    image.style.filter = computedFilters;
+  };
+  </script>  
+
+
+</body>
+
 </html>
+
+
+
+
+  

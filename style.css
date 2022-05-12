@@ -1,3 +1,8 @@
+
+h1{
+  padding: 30px;
+}
+
 .canvas {
     border: 1px black dotted;
     position: absolute;
@@ -15,4 +20,11 @@
   }
   #canvas-container {
     height: 600px;
+    position: relative;
+  }
+
+  .Filter{
+    position: relative; 
+    left: 85%;
+    top: 8%;
   }
